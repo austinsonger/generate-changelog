@@ -28,3 +28,17 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           body: ${{ steps.generate-release-changelog.outputs.changelog }}
+      - name: "📝 Write changelog to markdown"
+        run: |
+          VERSION=${{ github.ref }}
+          mkdir -p .github/changes
+          echo "## Release $VERSION" > .github/changes/v${VERSION}.md
+      - name: "📤 Commit and push changes"
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .github/changes/v${VERSION}.md
+          git commit -m "Add changelog for version $VERSION"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
