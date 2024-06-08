@@ -46,7 +46,9 @@ jobs:
         run: |
           DATE=$(date +'%Y-%m-%d')
           mkdir -p .github/changes
-          echo "## Changelog for $DATE" > .github/changes/${DATE}.md
+          TEMP_FILE=$(mktemp)
+          echo "## Changelog for $DATE" > "$TEMP_FILE"
+          mv "$TEMP_FILE" .github/changes/${DATE}.md
       - name: "📤 Commit and push changes"
         run: |
           git config --global user.name 'github-actions[bot]'
