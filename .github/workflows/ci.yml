@@ -15,7 +15,7 @@ jobs:
         id: generate-full-changelog
         uses: ./.github
         with: 
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
           headerLabel: "# 📑 Changelog"
           breakingLabel: '### 💥 Breaking'
           enhancementLabel: '### 🚀 Enhancements'
@@ -65,5 +65,5 @@ jobs:
             exit 1
           fi
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
