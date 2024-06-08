@@ -35,6 +35,7 @@ jobs:
           mkdir -p .github/changes
           chmod -R 777 .github/changes
           echo "## Release $VERSION" > .github/changes/v${VERSION}.md
+          ls -l .github/changes  # List the contents for debugging
       - name: "📤 Commit and push changes"
         run: |
           git config --global user.name 'github-actions[bot]'
