@@ -3,7 +3,7 @@ name: CI
 on: 
   workflow_dispatch:
   push:
-  
+
 jobs:
   build:
     name: "✏️ Changelog generation"
@@ -42,3 +42,17 @@ jobs:
         with:
           name: "Changelog"
           path: CHANGELOG.md
+      - name: "📝 Write changelog to markdown"
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          mkdir -p .github/changes
+          echo "## Changelog for $DATE" > .github/changes/${DATE}.md
+      - name: "📤 Commit and push changes"
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .github/changes/${DATE}.md
+          git commit -m "Add changelog for date $DATE"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
