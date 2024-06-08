@@ -46,7 +46,8 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add .github/changes/v${VERSION}.md
+          git commit -a
+          git add .github/changes/${VERSION}.md
           git commit -m "Add changelog for version $VERSION"
           git push
         env:
