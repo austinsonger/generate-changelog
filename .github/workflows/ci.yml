@@ -20,7 +20,7 @@ jobs:
         id: generate-full-changelog
         uses: ./.github
         with: 
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.CHANGELOG_TOKEN || secrets.GITHUB_TOKEN }}
           headerLabel: "# 📑 Changelog"
           breakingLabel: '### 💥 Breaking'
           enhancementLabel: '### 🚀 Enhancements'
@@ -77,7 +77,11 @@ jobs:
           else
             echo "File .github/changes/${DATE}.md does not exist"
             exit 1
-          fi
+
+      - name: GitHub Ref
+        uses: ./.github/workflows/github-ref-v1.yml
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.ref }}
     permissions:
       contents: write
-
