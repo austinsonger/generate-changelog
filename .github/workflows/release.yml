@@ -3,8 +3,8 @@ name: Create release
 on:
   workflow_dispatch:
   push:
-    paths:
-      - '.github/changes/**'
+#    paths:
+#      - '.github/changes/**'
     tags:
       - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
 
