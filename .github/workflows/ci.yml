@@ -3,6 +3,8 @@ name: CI
 on: 
   workflow_dispatch:
   push:
+    paths:
+      - '.github/changes/**'
 
 jobs:
   build:
@@ -11,6 +13,9 @@ jobs:
     steps:
       - name: "📥 Check-out"
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.CHANGELOG_TOKEN || secrets.GITHUB_TOKEN }}
+          
       - name: "✏️ Generate full changelog"
         id: generate-full-changelog
         uses: ./.github
@@ -35,13 +40,16 @@ jobs:
           compareLink: true
           stripGeneratorNotice: true
           verbose: true
+          
       - name: "🖨️ Print changelog to console"
         run: cat CHANGELOG.md
+
       - name: "📤 Upload changelog"
         uses: actions/upload-artifact@v4
         with:
           name: "Changelog"
           path: CHANGELOG.md
+
       - name: "📝 Write changelog to markdown"
         run: |
           DATE=$(date +'%Y-%m-%d')
@@ -51,20 +59,25 @@ jobs:
           echo "## Changelog for $DATE" > "$TEMP_FILE"
           mv "$TEMP_FILE" .github/changes/${DATE}.md
           ls -l .github/changes  # List the contents for debugging
+
+      - name: Set up Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
       - name: "📤 Commit and push changes"
         env:
           GITHUB_TOKEN: ${{ secrets.CHANGELOG_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
           DATE=$(date +'%Y-%m-%d')
           if [ -f .github/changes/${DATE}.md ]; then
-            git config --global user.name 'github-actions[bot]'
-            git config --global user.email 'github-actions[bot]@users.noreply.github.com'
             git add .github/changes/${DATE}.md
             git commit -m "Add changelog for date $DATE"
-            git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git main
+            git push https://x-access-token:${{ secrets.CHANGELOG_TOKEN }}@github.com/${{ github.repository }}.git main
           else
             echo "File .github/changes/${DATE}.md does not exist"
             exit 1
           fi
-
+    permissions:
+      contents: write
 
