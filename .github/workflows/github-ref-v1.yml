@@ -39,12 +39,8 @@ jobs:
         uses: octokit/request-action@v2.x
         id: ref
         with:
-          # https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28#get-a-reference
           route: GET /repos/${{ inputs.repository }}/git/ref/${{ steps.api_ref.outputs.ref }}
         env:
-          # A token with elevated privileges is required to access external
-          # repositories (i.e. all except github.repository).
-          # See: https://docs.github.com/en/actions/security-guides/automatic-token-authentication
           GITHUB_TOKEN: ${{ secrets.CHANGELOG_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Set variables
@@ -53,7 +49,6 @@ jobs:
           github_sha=${{ fromJson(steps.ref.outputs.data).object.sha }}
           echo "::debug::Resolved '${{ inputs.ref }}' to '$github_sha' on '${{ inputs.repository }}'"
           echo "github_sha=$github_sha" >> $GITHUB_OUTPUT
-
           github_sha_short=${github_sha:0:8}
           echo "github_sha_short=$github_sha_short" >> $GITHUB_OUTPUT
 
