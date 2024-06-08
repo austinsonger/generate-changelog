@@ -71,6 +71,7 @@ jobs:
         run: |
           DATE=$(date +'%Y-%m-%d')
           if [ -f .github/changes/${DATE}.md ]; then
+            git commit -a
             git add .github/changes/${DATE}.md
             git commit -m "Add changelog for date $DATE"
             git push https://x-access-token:${{ secrets.CHANGELOG_TOKEN || secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git main
