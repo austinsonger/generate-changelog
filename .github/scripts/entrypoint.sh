@@ -169,6 +169,7 @@ fi
 
 # Create the markdown file in .github/changes/
 mkdir -p .github/changes
+chmod -R 777 .github/changes
 
 if [ -n "${GITHUB_REF}" ] && [[ "${GITHUB_REF}" == refs/tags/* ]]; then
   VERSION=$(echo ${GITHUB_REF} | sed 's/refs\/tags\///')
