@@ -186,4 +186,4 @@ outputs:
     description: "Contents of generated change log."
 runs:
   using: "docker"
-  image: "./.github/workflows/Dockerfile"
+  image: "./Dockerfile"
