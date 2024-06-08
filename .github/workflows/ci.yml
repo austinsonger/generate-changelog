@@ -53,7 +53,7 @@ jobs:
           ls -l .github/changes  # List the contents for debugging
       - name: "📤 Commit and push changes"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           DATE=$(date +'%Y-%m-%d')
           if [ -f .github/changes/${DATE}.md ]; then
