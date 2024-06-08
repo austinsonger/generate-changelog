@@ -33,6 +33,7 @@ jobs:
         run: |
           VERSION=${{ github.ref }}
           mkdir -p .github/changes
+          chmod -R 777 .github/changes
           echo "## Release $VERSION" > .github/changes/v${VERSION}.md
       - name: "📤 Commit and push changes"
         run: |
