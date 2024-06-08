@@ -1,4 +1,5 @@
 #!/bin/bash
+
 istrue () {
   case $1 in
     "true"|"yes"|"y") return 0;;
@@ -19,7 +20,6 @@ if [ -z "$INPUT_REPO" ]; then INPUT_REPO="$GITHUB_REPOSITORY"; fi
 if [ -z "$INPUT_USER" ]; then INPUT_USER=$(echo "$INPUT_REPO" | cut -d / -f 1 ); fi
 # Set project input from repository, if not set.
 if [ -z "$INPUT_PROJECT" ]; then INPUT_PROJECT=$(echo "$INPUT_REPO" | cut -d / -f 2- ); fi
-
 
 # Only show last tag.
 if istrue "$INPUT_ONLYLASTTAG"; then
@@ -165,4 +165,15 @@ if [[ -e "$FILE" ]]; then
   CONTENT="${CONTENT//$'\n'/'%0A'}"
   CONTENT="${CONTENT//$'\r'/'%0D'}"
   echo "changelog=$CONTENT" >> $GITHUB_OUTPUT
+fi
+
+# Create the markdown file in .github/changes/
+mkdir -p .github/changes
+
+if [ -n "${GITHUB_REF}" ] && [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+  VERSION=$(echo ${GITHUB_REF} | sed 's/refs\/tags\///')
+  echo "## Release $VERSION" > .github/changes/v${VERSION}.md
+else
+  DATE=$(date +'%Y-%m-%d')
+  echo "## Changelog for $DATE" > .github/changes/${DATE}.md
 fi
