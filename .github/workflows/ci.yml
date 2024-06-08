@@ -3,8 +3,8 @@ name: CI
 on: 
   workflow_dispatch:
   push:
-    paths:
-      - '.github/changes/**'
+#    paths:
+#      - '.github/changes/**'
 
 jobs:
   build:
