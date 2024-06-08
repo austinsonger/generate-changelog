@@ -3,6 +3,8 @@ name: Create release
 on:
   workflow_dispatch:
   push:
+    paths:
+      - '.github/changes/**'
     tags:
       - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
 
@@ -17,7 +19,7 @@ jobs:
         id: generate-release-changelog
         uses: ./
         with:
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.CHANGELOG_TOKEN || secrets.GITHUB_TOKEN }}
           onlyLastTag: "true"
           stripHeaders: "true"
           stripGeneratorNotice: "true"
@@ -44,4 +46,7 @@ jobs:
           git commit -m "Add changelog for version $VERSION"
           git push
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CHANGELOG_TOKEN || secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+      
