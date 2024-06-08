@@ -45,16 +45,25 @@ jobs:
       - name: "📝 Write changelog to markdown"
         run: |
           DATE=$(date +'%Y-%m-%d')
+          echo "DATE is $DATE"  # Debug output
           mkdir -p .github/changes
           TEMP_FILE=$(mktemp)
           echo "## Changelog for $DATE" > "$TEMP_FILE"
           mv "$TEMP_FILE" .github/changes/${DATE}.md
+          ls -l .github/changes  # List the contents for debugging
       - name: "📤 Commit and push changes"
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add .github/changes/${DATE}.md
-          git commit -m "Add changelog for date $DATE"
-          git push
+          DATE=$(date +'%Y-%m-%d')
+          if [ -f .github/changes/${DATE}.md ]; then
+            git config --global user.name 'github-actions[bot]'
+            git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+            git add .github/changes/${DATE}.md
+            git commit -m "Add changelog for date $DATE"
+            git push
+          else
+            echo "File .github/changes/${DATE}.md does not exist"
+            exit 1
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
