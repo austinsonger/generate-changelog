@@ -44,11 +44,17 @@ jobs:
       - name: "🖨️ Print changelog to console"
         run: cat CHANGELOG.md
 
+      - name: "📤 Save changelog with date"
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          mv CHANGELOG.md ${DATE}.CHANGELOG.md
+
       - name: "📤 Upload changelog"
         uses: actions/upload-artifact@v4
         with:
           name: "Changelog"
-          path: CHANGELOG.md
+          path: |
+            ${{ steps.generate-full-changelog.outputs.DATE }}.CHANGELOG.md
 
       - name: "📝 Write changelog to markdown"
         run: |
@@ -71,10 +77,10 @@ jobs:
         run: |
           DATE=$(date +'%Y-%m-%d')
           if [ -f .github/changes/${DATE}.md ]; then
-            git commit -a
             git add .github/changes/${DATE}.md
+            git add ${DATE}.CHANGELOG.md
             git commit -m "Add changelog for date $DATE"
-            git push https://x-access-token:${{ secrets.CHANGELOG_TOKEN || secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git main
+            git push https://x-access-token:${{ secrets.CHANGELOG_TOKEN }}@github.com/${{ github.repository }}.git main
           else
             echo "File .github/changes/${DATE}.md does not exist"
             exit 1
