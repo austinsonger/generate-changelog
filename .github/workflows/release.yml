@@ -15,6 +15,7 @@ jobs:
     steps:
       - name: "📥 Check-out"
         uses: actions/checkout@v4
+        
       - name: "✏️ Generate release changelog"
         id: generate-release-changelog
         uses: ./
@@ -23,6 +24,7 @@ jobs:
           onlyLastTag: "true"
           stripHeaders: "true"
           stripGeneratorNotice: "true"
+          
       - name: "🚀 Create GitHub release"
         uses: actions/create-release@v1
         env:
@@ -31,6 +33,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           body: ${{ steps.generate-release-changelog.outputs.changelog }}
+          
       - name: "📝 Write changelog to markdown"
         run: |
           VERSION=${{ github.ref }}
@@ -38,6 +41,7 @@ jobs:
           chmod -R 777 .github/changes
           echo "## Release $VERSION" > .github/changes/v${VERSION}.md
           ls -l .github/changes  # List the contents for debugging
+          
       - name: "📤 Commit and push changes"
         run: |
           git config --global user.name 'github-actions[bot]'
