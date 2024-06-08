@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v4
       - name: "✏️ Generate full changelog"
         id: generate-full-changelog
-        uses: ./
+        uses: ./.github
         with: 
           token: ${{ secrets.GITHUB_TOKEN }}
           headerLabel: "# 📑 Changelog"
