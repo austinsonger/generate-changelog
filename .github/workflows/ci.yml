@@ -46,6 +46,7 @@ jobs:
         run: |
           DATE=$(date +'%Y-%m-%d')
           mkdir -p .github/changes
+          chmod -R 777 .github/changes
           echo "## Changelog for $DATE" > .github/changes/${DATE}.md
       - name: "📤 Commit and push changes"
         run: |
