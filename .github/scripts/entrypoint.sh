@@ -169,7 +169,7 @@ fi
 
 # Create the markdown file in .github/changes/
 mkdir -p .github/changes
-sudo chown -R $USER:$USER .github/changes
+chown -R $USER:$USER .github/changes
 chmod -R 755 .github/changes
 
 if [ -n "${GITHUB_REF}" ] && [[ "${GITHUB_REF}" == refs/tags/* ]]; then
