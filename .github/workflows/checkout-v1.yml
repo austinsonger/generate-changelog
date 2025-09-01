@@ -75,7 +75,7 @@ jobs:
           path: ${{ steps.vars.outputs.cache_path }}
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           repository: ${{ inputs.repository }}
